@@ -4,41 +4,53 @@ const Category = mongoose.model('Category');
 
 exports.getCategories = async (req, res) => {
   let cats = await Category.find();
-
   let result = {};
-  // result.level_1 = [];
-  // result.level_2 = [];
-  // result.level_3 = [];
-  // result.lines = [];
-  // for (itm of items) {
-  //   if (itm.level === 1) result.level_1.push(itm);
-  //   if (itm.level === 2) result.level_2.push(itm); 	
-  //   if (itm.level === 3) result.level_3.push(itm); 	
- 	
-  // }
-  // for (itm of result.level_3) {
-  //   let level2 = result.level_2.filter((e) => String(e._id) === String(itm.master))[0];
-  //   let level1 = result.level_1.filter((e) => String(e._id) === String(level2.master))[0];
-  //   let line = {
-  //     level_1: level1,
-  //     level_2: level2,
-  //     level_3: itm
-  //   }
-  //   result.lines.push(line); 
-  // } 
+  for (itm in cats) {
+    for (itm2 of cats) {
+      if (String(cats[itm].master) === String(itm2._id)) {
+        if (!result[itm2.text]) {
+          result[itm2.text] = {};
+          result[itm2.text].children = [];
+        }
+        let tmpObj = {};
+        if (result[cats[itm].text]) {
+          tmpObj[cats[itm].text] = result[cats[itm].text];
+          result[itm2.text].children.push(tmpObj);
+          delete result[cats[itm].text];
+        } else {
+          tmpObj[cats[itm].text] = {};		
+          result[itm2.text].children.push(tmpObj);
+	    }
+  	  }
+  	}
+  }
 
-  // res.setHeader('Content-Type', 'application/json');
-  // res.send(JSON.stringify(result.lines, null, 3));
+  res.setHeader('Content-Type', 'application/json');
+  res.send(JSON.stringify(result, null, 3));
 }
+
 
 exports.createCategory = async (req, res) => {
-
+  let master;
+  if (!req.query.master) {
+  	master = null;
+  } else { master = req.query.master } 	
+  const newCat = new Category({ text: req.query.text, master: master });
+  await newCat.save();
+  res.status(200).json(newCat);
 }
+
 
 exports.updateCategory = async (req, res) => {
+  const category = await Category.findOneAndUpdate({ _id: req.params.id }, req.body, {
+    new: true
+  }).exec();
+  res.status(200).json(category);
 
 }
 
-exports.delCategoryById = async (req, res) => {
 
+exports.delCategoryById = async (req, res) => {
+  const category = await Category.findByIdAndRemove(req.query.id);
+  res.status(200);
 }

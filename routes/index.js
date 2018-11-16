@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const bodyParser = require('body-parser')
 const categoryController = require('../controllers/categoryController');
 // const recipeController = require('../controllers/recipeController');
 // const articleController = require('../controllers/articleController');

@@ -1,6 +1,11 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 const path = require('path');
 const mongoose = require('mongoose');
+
+require('./models/Category');
+require('./models/Article');
+require('./models/Recipe');
 
 const errorHandlers = require('./handlers/errorHandlers');
 
@@ -11,12 +16,13 @@ mongoose.connection.on('error', (err) => {
   console.error(`🙅 🚫 🙅 🚫 🙅 🚫 🙅 🚫 → ${err.message}`);
 });
 
-require('./models/Category');
-require('./models/Article');
-require('./models/Recipe');
 
 
 const app = express();
+
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 
 // After allllll that above middleware, we finally handle our own routes!

@@ -25,6 +25,12 @@ exports.getRecipeById = async (req, res) => {
 };
 
 
+exports.getRecipies = async (req, res) => {
+  let result = await Recipe.find();
+  res.setHeader('Content-Type', 'application/json');
+  res.send(JSON.stringify(result, null, 3));
+}
+
 exports.createRecipe = async (req, res) => {
   const newRecipe = new Recipe(req.body);
   await newRecipe.save();
@@ -40,7 +46,7 @@ exports.updateRecipe = async (req, res) => {
 }
 
 
-exports.delRecipeyById = async (req, res) => {
+exports.delRecipeById = async (req, res) => {
   const recipe = await Recipe.findByIdAndRemove(req.query.id);
   res.status(200);
 }

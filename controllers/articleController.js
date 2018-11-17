@@ -5,7 +5,7 @@ const Article = mongoose.model('Article');
 const CatHandler = require('../handlers/catHandler');
 
 
-exports.getApiArticle = async (req, res) => {
+exports.getApiArticles = async (req, res) => {
   let article = await Article.findOne({ _id: req.params.id }).populate({
     path: 'categories'
     }).exec();
@@ -24,6 +24,11 @@ exports.getArticleById = async (req, res) => {
   res.send(JSON.stringify(article));
 };
 
+exports.getArticles = async (req, res) => {
+  let result = await Article.find();
+  res.setHeader('Content-Type', 'application/json');
+  res.send(JSON.stringify(result, null, 3));
+}
 
 exports.createArticle = async (req, res) => {
   const newArticle = new Article(req.body);
@@ -41,7 +46,7 @@ exports.updateArticle = async (req, res) => {
 }
 
 
-exports.delArticleyById = async (req, res) => {
+exports.delArticleById = async (req, res) => {
   const article = await Article.findByIdAndRemove(req.query.id);
   res.status(200);
 }

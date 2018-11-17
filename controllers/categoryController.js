@@ -29,6 +29,12 @@ exports.getApiCategoriesById = async (req, res) => {
   res.send(JSON.stringify(result, null, 3));
 }
 
+exports.getCategoryById = async (req, res) => {
+  const category = await Category.findOne({ _id: req.params.id });
+  if (!category) return next();
+  res.send(JSON.stringify(category));
+};
+
 
 exports.createCategory = async (req, res) => {
   let master;

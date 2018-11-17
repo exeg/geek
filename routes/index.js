@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const categoryController = require('../controllers/categoryController');
 const recipeController = require('../controllers/recipeController');
-// const articleController = require('../controllers/articleController');
+const articleController = require('../controllers/articleController');
 
 const { catchErrors } = require('../handlers/errorHandlers');
 
@@ -18,10 +18,10 @@ router.post('/add/recipe', catchErrors(recipeController.createRecipe));
 router.post('/add/recipe/:id', catchErrors(recipeController.updateRecipe));
 router.delete('/del/recipe/:id', catchErrors(recipeController.delRecipeById));
 
-// router.get('/articles', catchErrors(articleController.getArticles));
-// router.post('/add/article', catchErrors(articleController.createArticle));
-// router.post('/add/article/:id', catchErrors(articleController.updateArticle));
-// router.delete('/del/article/:id', catchErrors(articleController.delArticleById));
+router.get('/articles', catchErrors(articleController.getArticles));
+router.post('/add/article', catchErrors(articleController.createArticle));
+router.post('/add/article/:id', catchErrors(articleController.updateArticle));
+router.delete('/del/article/:id', catchErrors(articleController.delArticleById));
 
 /* API */
 

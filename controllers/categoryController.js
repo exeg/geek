@@ -1,30 +1,11 @@
 const mongoose = require('mongoose');
 const Category = mongoose.model('Category');
+const CatHandler = require('../handlers/catHandler');
 
 
 exports.getCategories = async (req, res) => {
   let cats = await Category.find();
-  let result = {};
-  for (itm in cats) {
-    for (itm2 of cats) {
-      if (String(cats[itm].master) === String(itm2._id)) {
-        if (!result[itm2.text]) {
-          result[itm2.text] = {};
-          result[itm2.text].children = [];
-        }
-        let tmpObj = {};
-        if (result[cats[itm].text]) {
-          tmpObj[cats[itm].text] = result[cats[itm].text];
-          result[itm2.text].children.push(tmpObj);
-          delete result[cats[itm].text];
-        } else {
-          tmpObj[cats[itm].text] = {};		
-          result[itm2.text].children.push(tmpObj);
-	    }
-  	  }
-  	}
-  }
-
+  let result = await CatHandler.catH(cats);
   res.setHeader('Content-Type', 'application/json');
   res.send(JSON.stringify(result, null, 3));
 }

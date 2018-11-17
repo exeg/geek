@@ -3,10 +3,9 @@ mongoose.Promise = global.Promise;
 
 const recipeSchema = new mongoose.Schema({
   name: { type: String },
-  category: {
-    type: mongoose.Schema.ObjectId,
-    ref: 'Category'
-  },
+  categories: [
+    { type: mongoose.Schema.ObjectId, ref: 'Category' }
+  ],
   text: { type: String }
 });
 
